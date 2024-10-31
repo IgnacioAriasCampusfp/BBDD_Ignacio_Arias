@@ -9,7 +9,7 @@ use parking;
 create table cliente(
 
 IdCliente int primary key auto_increment,
-Nombre varchar(50) not null ,
+Nombre varchar(30) not null ,
 Tlf varchar(12)
 
 );
@@ -34,7 +34,7 @@ modelo varchar(12),
 idcliente int,
 foreign key (idcliente) references cliente(IdCliente)
 );
-				
+
 -- 5) Ejecuta las siguientes líneas para dar de alta los coches:
 	INSERT INTO COCHE VALUES ('M-1111-AA','FORD','FIESTA',1);
 	INSERT INTO COCHE VALUES ('M-2323-AA','OPEL','CORSA',2);
@@ -50,19 +50,22 @@ foreign key (idcliente) references cliente(IdCliente)
 select coche.*, cliente.nombre from coche
 inner join cliente
 on cliente.idcliente = coche.idcliente
-order by cliente.nombre and coche.matricula;
+order by cliente.nombre, coche.matricula;
 
 
 
 -- 7) Ejecuta una SELECT para obtener el número de coches que tiene cada cliente.
-
-select idcliente, count(idcliente) from coche
-group by idcliente;
+select cliente.nombre, count(coche.Matricula)
+from cliente left join coche
+on cliente.idcliente = coche.IdCliente
+group by cliente.nombre;
 
 -- 8) Ejecuta una SELECT para obtener todos los coches cuya matrícula comienza por M junto al nombre del cliente.
-select*from coche
-where matricula between "M" and "Mzzz"
-order by matricula;
+select coche.*, nombre from coche
+inner join cliente
+on coche.IdCliente = cliente.IdCliente
+where matricula like "M%";
+
 
 -- 9) Ejecuta una SELECT para obtener todos los coches que no sean RENAULT.
 select*from coche
@@ -78,8 +81,8 @@ update coche
 set precio_compra="12000"
 where matricula not between  "M" and "Mz";
 -- 12) Aumenta un 10% el precio de todos los coches de la marca CITROEN.
+set sql_safe_update = 0;
 update coche
 set precio_compra=(precio_compra*10)/100
 where modelo != "CITROEN";
-
-
+set sql_safe_update = 1;
