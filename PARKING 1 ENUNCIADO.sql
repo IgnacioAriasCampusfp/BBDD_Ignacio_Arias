@@ -81,8 +81,8 @@ update coche
 set precio_compra="12000"
 where matricula not between  "M" and "Mz";
 -- 12) Aumenta un 10% el precio de todos los coches de la marca CITROEN.
-set sql_safe_update = 0;
+set sql_safe_updates = 0;
 update coche
 set precio_compra=(precio_compra*10)/100
 where modelo != "CITROEN";
-set sql_safe_update = 1;
+set sql_safe_updates = 1;
