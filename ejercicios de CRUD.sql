@@ -44,10 +44,10 @@ WHERE idproducto = 50;
 -- Intentar insertar un pais que no existe con un id ya existente
 Insert into pais values ("2", "Ecuador");
 
--- 
+-- Hacer un cambio de un producto cambiando su id por otro
 UPDATE Producto
-SET id_producto = 200
-WHERE id_producto = 5;
+SET idproducto = 200
+WHERE idproducto = 5;
 
 
 
