@@ -6,7 +6,7 @@ SELECT * FROM CLIENTE WHERE CIUDAD = 'MADRID';
 SELECT * FROM CLIENTE WHERE CIUDAD != 'MADRID';
 
 -- Obtén la información de todos los clientes cuyo nombre comience con una de las letras entre B y G.
-SELECT * FROM CLIENTE WHERE NOMBRE between 'B%' and 'G%';
+SELECT * FROM CLIENTE WHERE NOMBRE  between  'Baaa' and 'Gzzz';
 
 
 -- Obtén la información de todos los clientes cuyo nombre comience con la letra R.
@@ -115,21 +115,50 @@ JOIN DETALLE ON FACTURA.NUMERO = DETALLE.NUMERO
 WHERE FACTURA.PAGADO = TRUE;
 
 -- Obtén el importe total de todas las facturas de ROSA PEREZ DELGADO.
+SELECT SUM(DETALLE.UNIDADES * DETALLE.PRECIO) AS Total
+FROM FACTURA 
+JOIN CLIENTE  ON FACTURA.NIF = CLIENTE.NIF
+JOIN DETALLE  ON FACTURA.NUMERO = DETALLE.NUMERO
+WHERE CLIENTE.NOMBRE = 'ROSA PEREZ DELGADO';
 
 -- Obtén una relación de artículos junto a la suma de las unidades totales vendidas y
 -- el importe recaudado de dichas ventas.
+SELECT PRODUCTO.CODIGO, PRODUCTO.DESCRIPCION, SUM(DETALLE.UNIDADES) AS ventas_de_unidades, SUM(DETALLE.UNIDADES * DETALLE.PRECIO) AS Recaudado
+FROM DETALLE
+JOIN PRODUCTO ON DETALLE.CODIGO = PRODUCTO.CODIGO
+GROUP BY PRODUCTO.CODIGO, PRODUCTO.DESCRIPCION;
+
+
 
 -- Obtén una relación de clientes junto con el número total de facturas que tiene cada
 -- uno (cuenta de facturas de cada cliente).
+SELECT CLIENTE.NIF, CLIENTE.NOMBRE, COUNT(FACTURA.NUMERO) AS Cantidad_de_Facturas
+FROM CLIENTE 
+JOIN FACTURA  ON CLIENTE.NIF = FACTURA.NIF
+GROUP BY CLIENTE.NIF, CLIENTE.NOMBRE;
 
 -- Basándonos en el ejercicio 6, obtén el importe total a invertir en la reposición de
 -- artículos.
+SELECT SUM((MINIMO - STOCK) * PRECIO) AS Reposicion
+FROM PRODUCTO
+WHERE STOCK < MINIMO;
+
 
 -- Aumentar un 3% el precio del artículo BAF4.
+UPDATE PRODUCTO
+SET PRECIO = PRECIO * 1.03
+WHERE CODIGO = 'BAF4';
 
 -- Añade la factura 5010 con fecha de hoy.
+INSERT INTO FACTURA (NUMERO, FECHA, PAGADO, NIF)
+VALUES (5010, "2024-11-11", FALSE, '11111111A');
 
 -- Borra la factura 5010.
+DELETE FROM FACTURA WHERE NUMERO = 5010;
 
 -- Obtén la relación de productos junto al número de unidades vendidas de cada uno.
+SELECT PRODUCTO.CODIGO, PRODUCTO.DESCRIPCION, SUM(DETALLE.UNIDADES) AS Unidades_vendidas
+FROM DETALLE
+JOIN PRODUCTO ON DETALLE.CODIGO = PRODUCTO.CODIGO
+GROUP BY PRODUCTO.CODIGO, PRODUCTO.DESCRIPCION;
 
