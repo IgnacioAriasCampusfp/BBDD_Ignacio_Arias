@@ -59,7 +59,7 @@ begin
 end;
 $$
 
-select id_triangulo, tipo_triangulo(lados) as tipos,
+select id_triangulo,lados[1],lados[2],lados[3], tipo_triangulo(lados) as tipos,
 perimetro_triangulo(lados) as perimetro from triangulo;
 
 
